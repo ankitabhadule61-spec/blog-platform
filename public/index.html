@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BlogSphere – Stories worth reading</title>
+<meta name="description" content="Read and write posts on BlogSphere.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232441c8'/%3E%3Crect x='8' y='18' width='16' height='6' fill='%23ffe45c'/%3E%3Ctext x='16' y='23' font-family='Georgia' font-size='20' font-weight='700' text-anchor='middle' fill='white'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<script src="/js/app.js" defer></script>
+<script src="/js/home.js" defer></script>
+</head>
+<body>
+<header id="nav"></header>
+<main>
+<div class="wrap">
+  <div class="page-head" id="head">
+    <h1>Stories worth reading</h1>
+    <p>Fresh writing from people who care about what they say. Follow a tag, or start your own post.</p>
+  </div>
+  <section class="home-hero" aria-label="BlogSphere introduction">
+    <div class="hero-copy">
+      <span class="eyebrow">THE OPEN EDITION</span>
+      <h2>Ideas that stay with you.</h2>
+      <p>Discover thoughtful stories, sharp perspectives, practical guides and beautiful ideas from independent writers.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="/register">Start writing</a>
+        <a class="btn" href="#feed">Explore stories</a>
+      </div>
+    </div>
+    <div class="hero-orbit"><span>✦</span><b>Read</b><i>Write</i><em>Connect</em></div>
+  </section>
+  <section class="feature-strip" id="featuredSection">
+    <div class="section-title"><div><span class="eyebrow">EDITOR'S PICK</span><h2>Featured stories</h2></div><a href="/?sort=popular">See popular →</a></div>
+    <div class="feature-grid" id="featured"></div>
+  </section>
+  <div class="layout" id="feed">
+    <section aria-label="Posts">
+      <div class="tabs" id="sorts" role="tablist">
+        <button data-sort="latest" class="on">Latest</button>
+        <button data-sort="popular">Popular</button>
+        <button data-sort="discussed">Most discussed</button>
+      </div>
+      <div id="list" aria-live="polite"></div>
+      <div class="pager" id="pager"></div>
+    </section>
+    <aside class="side" aria-label="Topics"><div class="trending-box"><span class="eyebrow">TRENDING NOW</span><h3>What people are reading</h3><div id="trending"></div></div><div class="topic-box"><h3>Browse by topic</h3>
+      <h3>Browse by topic</h3>
+      <div class="tags" id="tags"></div></div>
+    </aside>
+  </div>
+</div>
+</main>
+<footer id="footer"></footer>
+</body>
+</html>

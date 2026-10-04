@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Write – BlogSphere</title>
+<meta name="description" content="Write a post.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff5c5c'/%3E%3Crect x='8' y='18' width='16' height='6' fill='%23ffd84d'/%3E%3Ctext x='16' y='23' font-family='Georgia' font-size='20' font-weight='700' text-anchor='middle' fill='white'%3EB%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+
+<script src="/js/app.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script src="/js/editor.js" defer></script>
+
+<style>
+/* =========================================================
+   BLOGSPHERE — PROFESSIONAL WRITING EDITOR
+   Wide editorial / landscape layout
+   ========================================================= */
+
+:root {
+  --editor-bg: #fff8f3;
+  --editor-surface: #ffffff;
+  --editor-ink: #171321;
+  --editor-muted: #756d7a;
+  --editor-light: #a39aa7;
+  --editor-line: #eadfe1;
+
+  --coral: #ff5c5c;
+  --coral-dark: #e94949;
+  --violet: #7557ff;
+  --yellow: #ffd84d;
+  --aqua: #13b8a6;
+
+  --editor-shadow:
+    0 18px 55px rgba(62, 35, 75, 0.10);
+
+  --editor-shadow-small:
+    0 8px 24px rgba(62, 35, 75, 0.07);
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 8% 0%,
+      rgba(255, 92, 92, 0.09),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(117, 87, 255, 0.10),
+      transparent 30rem
+    ),
+    var(--editor-bg);
+
+  color: var(--editor-ink);
+
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+}
+
+main {
+  flex: 1;
+}
+
+/* =========================================================
+   MAIN EDITOR PAGE
+   ========================================================= */
+
+.editor-page {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+}
+
+/* =========================================================
+   TOP EDITOR ACTION BAR
+   ========================================================= */
+
+.ed-bar {
+  position: sticky;
+  top: 72px;
+  z-index: 30;
+
+  width: 100%;
+
+  background: rgba(255, 248, 243, 0.90);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgba(234, 223, 225, 0.85);
+}
+
+.ed-bar-inner {
+  width: min(1180px, calc(100% - 64px));
+  min-height: 68px;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.state {
+  color: var(--editor-muted);
+
+  font-size: 0.84rem;
+  font-weight: 600;
+
+  letter-spacing: 0.02em;
+}
+
+.ed-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.ed-actions .btn {
+  height: 40px;
+
+  padding: 0 17px;
+
+  border-radius: 11px;
+
+  border: 1px solid var(--editor-line);
+
+  background: var(--editor-surface);
+
+  color: var(--editor-ink);
+
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.ed-actions .btn:hover {
+  transform: translateY(-1px);
+
+  border-color: #d8cdd1;
+
+  box-shadow: var(--editor-shadow-small);
+}
+
+.ed-actions .btn.primary {
+  color: #ffffff;
+
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--coral),
+      #ff7955
+    );
+
+  box-shadow:
+    0 8px 20px rgba(255, 92, 92, 0.22);
+}
+
+.ed-actions .btn.primary:hover {
+  box-shadow:
+    0 11px 26px rgba(255, 92, 92, 0.30);
+}
+
+/* =========================================================
+   EDITOR CONTENT WIDTH
+   ========================================================= */
+
+.editor-wrap {
+  width: min(1180px, calc(100% - 64px));
+
+  margin: 0 auto;
+
+  padding:
+    28px
+    0
+    80px;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.alert {
+  margin: 0 0 18px;
+
+  padding: 12px 15px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255, 92, 92, 0.25);
+
+  background: #fff0ed;
+
+  color: #b93636;
+
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.ed-title {
+  display: block;
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 28px 0 24px;
+
+  border: 0;
+  outline: none;
+
+  background: transparent;
+
+  color: var(--editor-ink);
+
+  font-family: 'Newsreader', Georgia, serif;
+
+  font-size: clamp(
+    3rem,
+    6vw,
+    5.2rem
+  );
+
+  font-weight: 650;
+
+  line-height: 0.98;
+
+  letter-spacing: -0.055em;
+}
+
+.ed-title::placeholder {
+  color: #b5adb5;
+
+  opacity: 1;
+}
+
+/* =========================================================
+   METADATA
+   ========================================================= */
+
+.ed-meta {
+  display: grid;
+
+  grid-template-columns:
+    0.75fr
+    1.15fr
+    1.35fr;
+
+  gap: 18px;
+
+  margin-bottom: 28px;
+}
+
+.field,
+.cover-field {
+  min-width: 0;
+}
+
+.field > span,
+.cover-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--editor-ink);
+
+  font-size: 0.78rem;
+
+  font-weight: 700;
+
+  letter-spacing: 0.02em;
+}
+
+.field small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: var(--editor-light);
+
+  font-size: 0.75rem;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.input {
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 13px;
+
+  border: 1px solid var(--editor-line);
+
+  border-radius: 11px;
+
+  outline: none;
+
+  background: var(--editor-surface);
+
+  color: var(--editor-ink);
+
+  font-family: inherit;
+  font-size: 0.9rem;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.input:hover {
+  border-color: #d9ced3;
+}
+
+.input:focus {
+  border-color: var(--coral);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 92, 92, 0.10);
+}
+
+/* =========================================================
+   COVER IMAGE
+   ========================================================= */
+
+.cover-pick {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 5px 6px 5px 11px;
+
+  border: 1px dashed #d9cdd1;
+
+  border-radius: 11px;
+
+  background: rgba(255, 255, 255, 0.72);
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.cover-pick:hover {
+  border-color: var(--coral);
+
+  background: #ffffff;
+}
+
+.cover-preview {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: var(--editor-light);
+
+  font-size: 0.82rem;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.cover-pick img {
+  width: 58px;
+  height: 38px;
+
+  flex: none;
+
+  object-fit: cover;
+
+  border-radius: 7px;
+}
+
+.cover-pick .btn {
+  flex: none;
+
+  height: 34px;
+
+  padding: 0 12px;
+
+  border-radius: 9px;
+
+  border: 1px solid var(--editor-line);
+
+  background: #ffffff;
+
+  color: var(--editor-ink);
+
+  font-size: 0.78rem;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.cover-pick .btn:hover {
+  border-color: var(--coral);
+}
+
+/* =========================================================
+   QUILL EDITOR CARD
+   ========================================================= */
+
+.editor-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: var(--editor-surface);
+
+  border: 1px solid var(--editor-line);
+
+  box-shadow: var(--editor-shadow);
+}
+
+/* =========================================================
+   QUILL TOOLBAR
+   ========================================================= */
+
+.editor-card .ql-toolbar.ql-snow {
+  border: 0 !important;
+
+  border-bottom: 1px solid var(--editor-line) !important;
+
+  border-radius: 0 !important;
+
+  background: #fffdfb;
+
+  padding: 13px 17px;
+
+  min-height: 54px;
+
+  display: flex;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 2px;
+}
+
+.editor-card .ql-toolbar button {
+  border-radius: 7px;
+
+  transition:
+    background 0.15s ease;
+}
+
+.editor-card .ql-toolbar button:hover {
+  background: #fff0ed;
+}
+
+.editor-card .ql-toolbar .ql-picker-label {
+  border-radius: 7px;
+}
+
+.editor-card .ql-toolbar .ql-picker-label:hover {
+  background: #fff0ed;
+}
+
+/* =========================================================
+   WRITING AREA
+   ========================================================= */
+
+.editor-card .ql-container.ql-snow {
+  border: 0 !important;
+
+  border-radius: 0 !important;
+
+  background: #ffffff;
+
+  min-height: 620px;
+}
+
+.editor-card .ql-editor {
+  min-height: 620px;
+
+  padding:
+    38px
+    48px
+    80px;
+
+  color: var(--editor-ink);
+
+  font-family: 'Newsreader', Georgia, serif;
+
+  font-size: 1.2rem;
+
+  line-height: 1.85;
+
+  letter-spacing: 0.005em;
+}
+
+/* =========================================================
+   QUILL PLACEHOLDER
+   ========================================================= */
+
+.editor-card .ql-editor.ql-blank::before {
+  left: 48px !important;
+
+  right: 48px;
+
+  color: #aaa1aa !important;
+
+  font-family: 'Newsreader', Georgia, serif;
+
+  font-size: 1.2rem;
+
+  font-style: normal !important;
+
+  opacity: 0.85;
+}
+
+/* =========================================================
+   EDITOR TYPOGRAPHY
+   ========================================================= */
+
+.editor-card .ql-editor h1,
+.editor-card .ql-editor h2,
+.editor-card .ql-editor h3 {
+  font-family: 'Newsreader', Georgia, serif;
+
+  color: var(--editor-ink);
+
+  line-height: 1.15;
+
+  letter-spacing: -0.025em;
+}
+
+.editor-card .ql-editor h1 {
+  font-size: 2.7rem;
+}
+
+.editor-card .ql-editor h2 {
+  font-size: 2.05rem;
+}
+
+.editor-card .ql-editor h3 {
+  font-size: 1.55rem;
+}
+
+.editor-card .ql-editor blockquote {
+  margin: 28px 0;
+
+  padding: 10px 20px;
+
+  border-left: 4px solid var(--yellow);
+
+  background: #fffaf0;
+
+  color: #625966;
+
+  border-radius: 0 10px 10px 0;
+}
+
+.editor-card .ql-editor a {
+  color: var(--violet);
+
+  text-decoration-thickness: 1px;
+}
+
+.editor-card .ql-editor img {
+  max-width: 100%;
+
+  border-radius: 14px;
+
+  margin: 20px 0;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+:root[data-theme="dark"] body {
+  --editor-bg: #110e17;
+  --editor-surface: #1a1622;
+  --editor-ink: #f8f4fa;
+  --editor-muted: #c4bdca;
+  --editor-light: #8e8797;
+  --editor-line: #302938;
+
+  background:
+    radial-gradient(
+      circle at 8% 0%,
+      rgba(255, 92, 92, 0.07),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(117, 87, 255, 0.08),
+      transparent 30rem
+    ),
+    var(--editor-bg);
+}
+
+:root[data-theme="dark"] .ed-bar {
+  background: rgba(17, 14, 23, 0.90);
+
+  border-bottom-color: #302938;
+}
+
+:root[data-theme="dark"] .input,
+:root[data-theme="dark"] .cover-pick,
+:root[data-theme="dark"] .editor-card,
+:root[data-theme="dark"] .editor-card .ql-toolbar.ql-snow,
+:root[data-theme="dark"] .editor-card .ql-container.ql-snow,
+:root[data-theme="dark"] .cover-pick .btn {
+  background: var(--editor-surface);
+
+  color: var(--editor-ink);
+
+  border-color: var(--editor-line);
+}
+
+:root[data-theme="dark"] .editor-card .ql-editor {
+  background: var(--editor-surface);
+
+  color: var(--editor-ink);
+}
+
+:root[data-theme="dark"] .editor-card .ql-toolbar button:hover,
+:root[data-theme="dark"] .editor-card .ql-toolbar .ql-picker-label:hover {
+  background: #2a2232;
+}
+
+:root[data-theme="dark"] .editor-card .ql-editor blockquote {
+  background: #241d22;
+
+  color: #c4bdca;
+}
+
+:root[data-theme="dark"] .alert {
+  background: #2a1a1d;
+
+  border-color: #563039;
+
+  color: #ffaaa5;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .ed-bar-inner,
+  .editor-wrap {
+    width: min(
+      100% - 40px,
+      1180px
+    );
+  }
+
+  .ed-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cover-field {
+    grid-column: 1 / -1;
+  }
+
+  .ed-title {
+    font-size: clamp(
+      2.8rem,
+      7vw,
+      4.5rem
+    );
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .ed-bar {
+    top: 60px;
+  }
+
+  .ed-bar-inner,
+  .editor-wrap {
+    width: calc(100% - 24px);
+  }
+
+  .ed-bar-inner {
+    min-height: 62px;
+  }
+
+  .state {
+    font-size: 0.78rem;
+  }
+
+  .ed-actions {
+    gap: 6px;
+  }
+
+  .ed-actions .btn {
+    height: 36px;
+
+    padding: 0 11px;
+
+    font-size: 0.76rem;
+  }
+
+  .editor-wrap {
+    padding-top: 18px;
+    padding-bottom: 50px;
+  }
+
+  .ed-title {
+    font-size: 2.8rem;
+
+    padding:
+      22px
+      0
+      20px;
+  }
+
+  .ed-meta {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+  }
+
+  .cover-field {
+    grid-column: auto;
+  }
+
+  .editor-card {
+    border-radius: 14px;
+  }
+
+  .editor-card .ql-toolbar.ql-snow {
+    padding: 9px;
+
+    min-height: auto;
+  }
+
+  .editor-card .ql-container.ql-snow,
+  .editor-card .ql-editor {
+    min-height: 500px;
+  }
+
+  .editor-card .ql-editor {
+    padding:
+      25px
+      20px
+      60px;
+
+    font-size: 1.08rem;
+  }
+
+  .editor-card .ql-editor.ql-blank::before {
+    left: 20px !important;
+    right: 20px;
+
+    font-size: 1.08rem;
+  }
+
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<header id="nav"></header>
+
+<main>
+
+  <div class="editor-page">
+
+    <!-- TOP ACTION BAR -->
+    <div class="ed-bar">
+
+      <div class="ed-bar-inner">
+
+        <span class="state" id="state">
+          New post
+        </span>
+
+        <div class="ed-actions">
+
+          <button
+            class="btn sm"
+            id="draftBtn"
+            type="button"
+          >
+            Save draft
+          </button>
+
+          <button
+            class="btn sm primary"
+            id="publishBtn"
+            type="button"
+          >
+            Publish
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- EDITOR CONTENT -->
+
+    <div class="editor-wrap">
+
+      <div
+        class="alert"
+        id="err"
+        role="alert"
+        hidden
+      ></div>
+
+
+      <!-- TITLE -->
+
+      <input
+        class="ed-title"
+        id="title"
+        type="text"
+        placeholder="Give your story a title..."
+        maxlength="150"
+        aria-label="Title"
+        autocomplete="off"
+        autofocus
+      >
+
+
+      <!-- METADATA -->
+
+      <div class="ed-meta">
+
+        <!-- CATEGORY -->
+
+        <label class="field">
+
+          <span>Category</span>
+
+          <select
+            class="input"
+            id="category"
+          >
+            <option>Technology</option>
+            <option>Design</option>
+            <option>Business</option>
+            <option>Travel</option>
+            <option>Lifestyle</option>
+            <option>Culture</option>
+            <option>Career</option>
+            <option>General</option>
+          </select>
+
+        </label>
+
+
+        <!-- TAGS -->
+
+        <label class="field">
+
+          <span>Tags</span>
+
+          <input
+            class="input"
+            id="tags"
+            type="text"
+            placeholder="design, javascript, travel"
+            aria-describedby="tagHelp"
+            autocomplete="off"
+          >
+
+          <small id="tagHelp">
+            Up to 5, separated by commas.
+          </small>
+
+        </label>
+
+
+        <!-- COVER -->
+
+        <div class="cover-field">
+
+          <span class="cover-label">
+            Cover image
+          </span>
+
+          <div class="cover-pick">
+
+            <div
+              id="coverPrev"
+              class="cover-preview"
+            >
+              No image selected
+            </div>
+
+            <label
+              class="btn sm"
+              for="coverFile"
+              style="margin-left:auto"
+            >
+              Choose image
+            </label>
+
+            <input
+              id="coverFile"
+              type="file"
+              accept="image/png,image/jpeg,image/gif,image/webp"
+              class="sr-only"
+            >
+
+            <button
+              class="btn sm ghost"
+              id="coverClear"
+              type="button"
+              hidden
+            >
+              Remove
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- QUILL EDITOR -->
+
+      <section
+        class="editor-card"
+        aria-label="Blog post editor"
+      >
+
+        <div id="editor"></div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer id="footer"></footer>
+
+</body>
+</html>
